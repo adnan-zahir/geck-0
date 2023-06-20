@@ -13,9 +13,9 @@ module.exports = {
 
     const memberList = filteredPresences
       .map((member) => {
-        return `- ${member.user.tag}\n`;
+        return `- ${member.user.tag}`;
       })
-      .join();
+      .join("\n");
     const embed = new EmbedBuilder().setTitle("Check Game").addFields([
       { name: "Game / Activity", value: act, inline: true },
       {

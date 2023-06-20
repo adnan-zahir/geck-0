@@ -11,29 +11,27 @@ module.exports = {
       const options = [];
 
       const { guild } = interaction;
-      await guild.members.fetch();
-      const rawMembers = guild.members.cache;
+      const rawMembers = await guild.members.fetch();
       const dupeDetection = [];
-      for (const [key, value] of rawMembers) {
-        const { guild } = interaction;
+      for (const [key, member] of rawMembers) {
         const presence = guild.presences.resolve(key);
 
         if (!presence) continue;
-        if (value.user.bot) continue;
+        if (member.user.bot) continue;
         if (presence.activities.length == 0) continue;
 
         const actName = presence.activities[0].name;
         if (actName === "Custom Status") continue;
 
+        const presenceData = {
+          user: member.user,
+          presence,
+        };
+        memberPresences.set(key, presenceData);
+
         if (dupeDetection.includes(actName)) continue;
         dupeDetection.push(actName);
 
-        const presenceData = {
-          user: value.user,
-          presence,
-        };
-
-        memberPresences.set(key, presenceData);
         options.push({
           label: actName,
           value: actName,
