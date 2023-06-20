@@ -1,3 +1,6 @@
+const mongoose = require("mongoose");
+const Intro = require("../../schemas/intro");
+
 module.exports = {
   name: "interactionCreate",
   async execute(interaction, client) {

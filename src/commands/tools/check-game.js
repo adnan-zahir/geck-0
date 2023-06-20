@@ -1,5 +1,4 @@
 const { ActionRowBuilder } = require("discord.js");
-const { StringSelectMenuOptionBuilder } = require("discord.js");
 const { SlashCommandBuilder, StringSelectMenuBuilder } = require("discord.js");
 
 module.exports = {

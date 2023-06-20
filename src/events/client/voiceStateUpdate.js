@@ -15,7 +15,7 @@ module.exports = {
     }
 
     // Find if the new channel is listed
-    let channelProfile = await MuteChannel.findOne({
+    const channelProfile = await MuteChannel.findOne({
       channelId: newState.channelId,
     });
 

@@ -12,6 +12,7 @@ client.buttons = new Collection();
 client.selectMenus = new Collection();
 client.modals = new Collection();
 client.memberPresences = new Collection();
+client.intro = {};
 client.commandArray = [];
 
 const functionFolders = fs.readdirSync("./src/functions");

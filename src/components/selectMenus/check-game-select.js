@@ -6,26 +6,21 @@ module.exports = {
   },
   async execute(interaction, client) {
     const { memberPresences } = client;
-    const filteredPresences = memberPresences.filter(
-      (member) => member.presence.activities[0].name === interaction.values[0]
-    );
-
     const act = interaction.values[0];
+    const filteredPresences = memberPresences.filter(
+      (member) => member.presence.activities[0].name === act
+    );
 
     const memberList = filteredPresences
       .map((member) => {
         return `- ${member.user.tag}\n`;
       })
       .join();
-    const embed = new EmbedBuilder().setTitle(`Check Game`).addFields([
+    const embed = new EmbedBuilder().setTitle("Check Game").addFields([
       { name: "Game / Activity", value: act, inline: true },
       {
         name: "Being Played by",
-        value: `${
-          filteredPresences.size > 1
-            ? filteredPresences.size + "Members"
-            : "1 Member"
-        }`,
+        value: `${filteredPresences.size} Member(s)`,
         inline: true,
       },
       {
