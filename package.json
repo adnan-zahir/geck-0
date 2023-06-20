@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/bot.js",
   "scripts": {
-    "start": "node ."
+    "start": "node src/register-commands.js && node src/bot.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,7 @@
     "@discordjs/rest": "^1.7.1",
     "chalk": "4.1.2",
     "discord-api-types": "^0.37.45",
+    "discord-rpc": "^4.0.1",
     "discord.js": "^14.11.0",
     "dotenv": "^16.1.4",
     "mongoose": "^7.3.0"

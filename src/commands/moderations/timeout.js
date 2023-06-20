@@ -46,7 +46,7 @@ module.exports = {
       .timeout(time * 60 * 1000, reason)
       .catch(console.error);
     await interaction.reply({
-      content: `Banned ${user.tag}\nReason: ${reason}`,
+      content: `Timout ${user.tag}\nReason: ${reason}`,
     });
   },
 };

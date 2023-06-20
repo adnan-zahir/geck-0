@@ -12,6 +12,8 @@ module.exports = {
       status: "online",
     };
 
+    // Rich Presence for Bots is not allowed for now
+    // client.rpc();
     try {
       await client.user.setPresence({
         activities: [

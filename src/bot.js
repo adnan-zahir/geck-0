@@ -11,6 +11,7 @@ client.commands = new Collection();
 client.buttons = new Collection();
 client.selectMenus = new Collection();
 client.modals = new Collection();
+client.memberPresences = new Collection();
 client.commandArray = [];
 
 const functionFolders = fs.readdirSync("./src/functions");
@@ -24,9 +25,10 @@ for (const folder of functionFolders) {
   }
 }
 
-client.handleEvents();
 client.handleCommands();
+client.handleEvents();
 client.handleComponents();
+
 client.login(token);
 
 (async () => await connect(databaseToken).catch(console.error))();

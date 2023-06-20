@@ -3,8 +3,12 @@ module.exports = {
     name: "socials",
   },
   async execute(interaction, client) {
-    await interaction.reply({
-      content: `Check it out! ${interaction.values[0]}`,
-    });
+    try {
+      await interaction.reply({
+        content: `Check it out! ${interaction.values[0]}`,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   },
 };
