@@ -8,7 +8,7 @@ const Intro = require("../../schemas/intro");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("intro-setup")
+    .setName("setup-intro")
     .setDescription("Setup introduction channel and roles")
     .addChannelOption((option) =>
       option
@@ -43,11 +43,11 @@ module.exports = {
     const takeRole = interaction.options.getRole("take");
     const giveRole = interaction.options.getRole("give");
     const emoji = interaction.options.getString("emoji");
-    let intro = await Intro.findOne({
-      channelId: channel.id,
-    });
+    let intro = await Intro.find({
+      guildId: interaction.guild.id,
+    }).exec();
 
-    if (!intro) {
+    if (!intro || intro.length === 0) {
       intro = new Intro({
         _id: new mongoose.Types.ObjectId(),
         roleId: {
@@ -65,11 +65,26 @@ module.exports = {
         ephemeral: true,
       });
     } else {
-      await Intro.deleteOne({
+      await Intro.deleteMany({});
+      intro = new Intro({
+        _id: new mongoose.Types.ObjectId(),
+        roleId: {
+          take: takeRole.id,
+          give: giveRole.id,
+        },
         channelId: channel.id,
+        defaultEmoji: emoji,
+        guildId: interaction.guild.id,
       });
+
+      await intro.save().catch(console.error);
+      const newIntro = await Intro.findOne({
+        guildId: interaction.guild.id,
+        channelId: channel.id,
+      }).lean();
+      Object.assign(client.intro, newIntro);
       await interaction.reply({
-        content: `Removed channel <#${channel.id}> from the intro database.`,
+        content: `Updated channel <#${channel.id}> as the intro channel.`,
         ephemeral: true,
       });
     }

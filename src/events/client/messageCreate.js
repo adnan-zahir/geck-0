@@ -6,25 +6,33 @@ module.exports = {
   async execute(message, client) {
     try {
       const { channel } = message;
-      const intro = await Intro.findOne({
-        channelId: channel.id,
-      });
 
-      // If message is not in the setup channel then return
-      if (!intro) return;
+      // ASSIGN ALL FETCHED DATAS
+      let intro = client.intro;
+      if (Object.keys(intro).length === 0) {
+        intro = await Intro.findOne({
+          guildId: message.guild.id,
+          channelId: channel.id,
+        }).lean();
 
-      // If member does not have the specified role then retur
-      const member = await message.member.fetch();
-      const { roles, user } = member;
-      const role = roles.resolve(intro.roleId.take);
-      if (!role) return;
+        if (!intro) return;
+        Object.assign(client.intro, intro);
+      }
 
-      // REACT TO THE MESSAGE
-      Object.assign(client.intro, intro._doc);
-      await message.react(intro.defaultEmoji);
-      console.log(
-        chalk.italic(`Reacted to ${user.tag}'s introduction message.`)
-      );
+      // INTRO INITIATION CHECK
+      if (message.channelId === intro.channelId) {
+        // If member does not have the specified role then retur
+        const member = await message.member.fetch();
+        const { roles, user } = member;
+        const role = roles.resolve(intro.roleId.take);
+        if (!role) return;
+
+        // REACT TO THE MESSAGE
+        await message.react(intro.defaultEmoji);
+        console.log(
+          chalk.italic(`Reacted to ${user.tag}'s introduction message.`)
+        );
+      }
     } catch (error) {
       console.error(error);
     }

@@ -13,7 +13,10 @@ client.selectMenus = new Collection();
 client.modals = new Collection();
 client.memberPresences = new Collection();
 client.intro = {};
+client.mutedArray = [];
+client.letsPlay = {};
 client.commandArray = [];
+client.twitch = {};
 
 const functionFolders = fs.readdirSync("./src/functions");
 for (const folder of functionFolders) {

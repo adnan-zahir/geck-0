@@ -2,7 +2,7 @@ const MuteChannel = require("../../schemas/muteChannel");
 
 module.exports = {
   name: "voiceStateUpdate",
-  async execute(oldState, newState) {
+  async execute(oldState, newState, client) {
     // If the user leaves to nothing then return
     if (newState.channelId === null) return;
 
@@ -14,25 +14,32 @@ module.exports = {
       newState.setMute(false);
     }
 
-    // Find if the new channel is listed
-    const channelProfile = await MuteChannel.findOne({
-      channelId: newState.channelId,
-    });
+    // ASSIGN ALL FETCHED DATAS
+    let mutedArray = client.mutedArray;
+    if (mutedArray.length === 0) {
+      const muteChannels = await MuteChannel.find({
+        guildId: newState.guild.id,
+      }).exec();
 
-    // If it does not happen in the listed channel then return
-    if (!channelProfile) return;
+      if (!muteChannels || muteChannels.length === 0) return;
+      mutedArray = muteChannels;
+      Object.assign(client.mutedArray, muteChannels);
+    }
 
-    // USER JOIN
-    console.log(
-      `User ${newState.member.user.tag} joins ${
-        channelProfile.channelName || channelProfile.channelId
-      }`
-    );
+    // MUTED CHANNEL CHECK
+    for (const muted of mutedArray) {
+      if (muted.channelId === newState.channelId) {
+        console.log(
+          `User ${newState.member.user.tag} joins ${
+            muted.channelName || muted.channelId
+          }`
+        );
 
-    const laraBot = "944016826751389717";
-    // Whitelist Lara bot
-    if (newState.member.id == laraBot) return;
-    await newState.setMute();
-    console.log(`Muted ${newState.member.user.tag}`);
+        // Don't mute bots
+        if (newState.member.user.bot) return;
+        await newState.setMute();
+        console.log(`Muted ${newState.member.user.tag}`);
+      }
+    }
   },
 };

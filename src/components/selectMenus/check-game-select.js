@@ -24,7 +24,7 @@ module.exports = {
         inline: true,
       },
       {
-        name: "Member List",
+        name: "Playing",
         value: memberList,
       },
     ]);
